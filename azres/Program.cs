@@ -33,13 +33,19 @@ namespace azres
             }
 
             var sb = new StringBuilder();
-            sb.AppendLine("name,type,resource group,location");
 
+            var rg = "";
             foreach (var item in items.OrderBy(i => i.ResGrp).ThenBy(i => i.Type))
             {
+                if (rg != item.ResGrp)
+                {
+                    rg = item.ResGrp;
+                    sb.AppendLine(rg);
+                    sb.AppendLine(",name,type,location");
+                }
                 sb.AppendLine(string.Join(",", new List<string>
                 {
-                    item.Name, item.Type, item.ResGrp, item.Location
+                    "", item.Name, item.Type, item.Location
                 }.ToArray()));
             }
             File.WriteAllText(fout, sb.ToString());
